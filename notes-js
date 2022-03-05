@@ -1,0 +1,485 @@
+2021-08-01 Sun 12:24 AM
+
+JAVASCRIPT
+
+2021-08-01 Sun 12:25 AM
+    
+    \_ Started freecodecamp again ... 
+        \_ keywords 
+            \_ delete object.someValue 
+        \_ methods 
+            \_ check if object has property 
+                \_ object.hasOwnProperty('key');
+                \_ 'key' in object;
+                \_ returns true if a `key` was found in the object
+            \_ Object.keys() // generates an array that stores all keys in an object
+                \_ let someArray = Object.keys(`Object`)
+            \_ verify if an object instance inherits the function or class contructor 
+                \_ method:  .isPrototypeOf()
+                \_ ClassOrFunctionName.prototype.isPrototypeOf(ClassOrFunctionInstance);  // returns true or false 
+
+2021-08-03 Tue 10:28 PM
+
+        \_ MUST LEARN ES-6 ; familiarize also ES-5
+        \_ arrow function  // to write anonymous functions
+            \_ before
+                \_ const myFunc = function() {
+                       const myVar = 'value';
+                       return myVar;
+                   }
+            \_ modern as of now  // arrow function syntax 
+                \_ const myFunc = () => {
+                       const myVar = "value";
+                       return myVar;
+                   }
+                \_ if without function body and only return value
+                    \_ const myFunc = () => "value"; 
+                \_ with parameters 
+                    \_ const myFunc = (a, b) => a + b; 
+                    \_ myFunc(2, 4);  // returns 6 
+                \_ default values 
+                    \_ const myFunc = (a = "domo") => a + ' anonymous'; 
+                    \_ myFunc();  // returns "domo anonymous" 
+
+2021-08-04 Wed 09:20 PM
+
+        \_ rest parameter  // for function parameters
+            \_ syntax:  
+                \_ function sampleFunc (...args) {
+                       // some actions
+                       // args can be any keyname and return an array
+                   }
+            \_ functions can use:
+                \_ map()
+                \_ filter()
+                \_ reduce()
+        \_ spread parameter  // a bit like rest parameter however, returns an unpacked array ; comma-separated data
+            \_ instead of: 
+                \_ const sampleArr1 = [1, 2, 3]:
+                   let sampleArr2 = [sampleArr1]:  // returns [[1, 2, 3]]
+            \_ do: 
+                \_ const sampleArr1 = [1, 2, 3]:
+                   let sampleArr2 = [...sampleArr1]:  // returns [1, 2, 3]
+
+2021-08-07 Sat 02:43 AM    
+        
+        \_ destructuring object to new variables assignment  // from an object
+            \_ example: const someObj = { name: 'imName', age: someNum }
+                \_ re-assigning: instead of (ES5):
+                    \_ const name = someObj.name;
+                       const age = someObj.age;
+                \_ re-assigning: do (ES6):
+                    \_ const { name, age } = someObj;  // must have the same name of key in object to assign to
+                \_ renaming assigned: do (ES6):
+                    \_ const { name: newNameOfName, age: newNameOfAge } = someObj;   
+                    \_ does not rename key name in object; only renames the reassigning of new variable 
+            \_ example: const someObj = { 
+                            names: {
+                                name1: 'name1',
+                                name2: 'name2',
+                            }, 
+
+                            ages: {
+                                age1: integer1,
+                                age2: integer2
+                            } 
+                        };
+                \_ renaming assigned: do (ES6):
+                    \_ const { names: {name1: newName1}, ages: {age2: newAge2} } = someObj;
+        \_ destructuring array ... 
+            \_ example: const myArray = ['donair pita', 'ramen', 'sashimi', 2]; 
+                \_ do (ES6): 
+                    \_ const [b, c] = myArray; 
+                    \_ `b` contains string 'donair pita' ; `c` contains string 'ramen' 
+        \_ destructuring object in a function argument... 
+            \_ example (ES5): const myObj = (favourites) => {
+                            const { food, number, games, topics } = favourites;
+                        } 
+                \_ do (ES6): 
+                    \_ const myObj = ({ food, number, games, topics }) => {}  // then favourites object can be passed in the argument
+        \_ template strings
+            \_ const titleScreen = `Welcome ${nameVisitor}!
+               You are the ${visitorQueue}nth viewer!`;
+            \_ notes on this:
+                \_ no need for \n as spacing and newlines are reflected in output
+                \_ syntax to input variables ${variableName}
+                \_ can use expression in variable  // ${variable1 + variable2}
+
+2021-08-09 Mon 10:08 PM                       
+    
+        \_ object literal declarations using object property shorthand  
+            \_ instead of (ES5): 
+                \_ const getCoors = (x, y) => ({
+                       x: x,
+                       y: y
+                   });
+            \_ do (ES6): 
+                \_ const getCoors = (x, y) => ({ x, y });  // returns an object {x: x, y: y}
+        \_ function declarations in objects
+            \_ instead of (ES5): 
+                \_ const getCoors = {
+                       x: 69,
+                       y: 420,
+                       z: function() {
+                           return `i dont know just give me ${this.x} and ${this.y}.`;
+                       }
+                   };
+            \_ do (ES6): 
+                \_ const getCoors = {
+                       x: 69,
+                       y: 420,
+                       z() {
+                           return `i dont know just give me ${this.x} and ${this.y}.`;
+                       }
+                   };
+        \_ class syntax  // just a syntax ; this concept does not correlation with object paradigm like in PHP, Python, etc... 
+            \_ instead of (ES5): 
+                \_ var GetCoors = function(targetX, targetY) {
+                       this.x = targetX;
+                       this.y = targetY;
+                   }
+                \_ var myExCoors = new GetCoors(69, 420);
+            \_ do (ES6): 
+                \_ class GetCoors {
+                       constructor (targetX, targetY) {
+                           this.x = targetX;
+                           this.y = targetY;
+                       }
+                   }
+                \_ const myExCoors = new GetCoors(69, 420);
+           
+2021-08-10 Tue 09:03 PM
+            
+            \_ javascript class getters
+                \_ ES6 syntax within a class:
+                    \_ get readX() {  // no parameter
+                           return this.x;
+                       }
+                    \_ GetCoors.readX;
+            \_ javascript class setters
+                \_ ES6 syntax within a class:
+                    \_ set updateX(infoX) {  // setters must have exactly one formal parameter  
+                           this.x = infoX;
+                       }
+                    \_ GetCoors.updateX = '<new value>';
+        \_ creating module script 
+            \_ ES6 syntax in HTML file: 
+                \_ <script type="module" src="index.js"></script>
+        \_ exporting module script 
+            \_ ES6 syntax: 
+                \_ export const add = (a, b) => {return x + y;}  // note export keyword
+            \_ to export multiple functions: 
+                \_ export { add, subtract, multiply };
+            \_ export fallback 
+                \_ export default function() { function_content }   
+                \_ can only have one value be a default export in each module or file   
+        \_ importing module script 
+            \_ ES6 syntax: 
+                \_ import { add, etc... } from './math_functions.js';  // ./ means same folder as current file
+            \_ to import all and creating object for functions: 
+                \_ import * as objectName from './folder_name';  // * means all contents of that file 
+                \_ objectName.funcName();
+            \_ import default export: 
+                \_ import nameOfFunction from './file_name.js';  // ./ means same folder as current file
+                \_ notice no curly braces {} for importing defaulted export
+
+2021-08-15 Sun 09:04 PM
+
+        \_ JS Promise 
+            \_ ES6 syntax: 
+                \_ const myPromiseKeyname = new Promise ((resolve, reject) = > {}); 
+            \_ promise states
+                \_ pending 
+                \_ fulfilled 
+                \_ rejected 
+            \_ with resolve and reject functions
+                \_ const myPromiseKeyname = new Promise ((resolve, reject) = > {
+                       if (somethingTrueOrFalse) {
+                           resolve('success'); 
+                       }
+                       else {
+                           reject('fail'); 
+                       }
+                   }); 
+            \_ promise methods
+                \_ .then
+                    \_ myPromiseKeyname.then(result => console.log(result)); 
+                \_ .catch
+                    \_ myPromiseKeyname.catch(error => console.log(error)); 
+            \_ most useful when a process takes an unknown amount of time in the code 
+
+2021-08-17 Tue 08:20 PM
+
+        \_ JS Falsy Values
+            \_ false, null, 0, "", undefined, NaN
+
+2021-08-26 Thu 08:33 PM
+
+        \_ OOP - 
+            \_ Prototype properties to reduce duplicate code
+                \_ instead of making millions of instance `property` duplicates
+                \_ instead of:
+                    \_ function ClassOrFunctionName (property1, property2) {
+                           this.property1 = property1;
+                           this.property2 = property2;
+                           this.nameOfProperty = constantOrFixedValue;
+                       }
+                \_ do: 
+                    \_ separate or outside declaration in function or class
+                    \_ ClassOrFunctionName.prototype.nameOfProperty = value;  // the word `prototype` was added to avoid duplication 
+                \_ efficient way of declaring prototypes in objects syntax:
+                    \_ ClassOrFunctionName.prototype = {
+                           prototypePropName1: value,
+                           prototypePropName2: function() {
+                               ...do something
+                           },
+                           prototypePropName3: function() {
+                               ...do something
+                           }
+                       }
+                    \_ when doing this constructor property gets erased! 
+                    \_ will return false when it should be true: (ClassOrFunctionInstance.constructor === ClassOrFunctionName)
+                    \_ solution: 
+                        \_ ClassOrFunctionName.prototype = {
+                               constructor: ClassOrFunctionName,  // ADD THIS LINE TO EVERY OBJECT PROTOTYPES TO AVOID BUG
+                               prototypePropName1: value,
+                               prototypePropName2: function() {
+                                   ...do something
+                               },
+                               prototypePropName3: function() {
+                                   ...do something
+                               }
+                           }
+            \_ the constructor property
+                \_ example:
+                    \_ console.log(ClassOrFunctionInstance.constructor === ClassOrFunctionName)
+                    \_ returns true if the object instance agrees to the right class or function it was declared to
+                \_ is use to check if an object instance holds true to its declaration
+            \_ iterate over all properties
+                \_ use a for loop iterating through an instance of a class/object
+                \_ then use .hasOwnProperty if its in the class/object property then store in an array 
+                \_ else the declared property prototypes will trigger and are stored in a separate array 
+            \_ inheritance so you dont have to repeat yourself (practice DRY coding principle) 
+                \_ syntax:
+                    \_ function SuperParent() {};
+
+                       SuperParent.prototype = {
+                           z: function () { ... do something }
+                       };
+
+                       ClassOrFunctionName1.prototype = {
+                           constructor: ClassOrFunctionName
+                       };
+
+                       ClassOrFunctionName1.prototype = {
+                           constructor: ClassOrFunctionName
+                       };
+                \_ ClassOrFunctionName1, etc... can now access functions inside parent 
+                \_ so you wont have to repeat defining them again on each ClassOrFunctionName prototypes
+
+2021-08-28 Sat 01:00 AM
+
+            \_ inheritance for super type
+                \_ // example
+                   function SuperParentType() {}
+                   
+                   SuperParenType.prototype.functionName = function () {
+                       ... do something ...
+                   }
+                \_ then to create an instance to avoid complex disadvantages
+                    \_ let someObjectInstance = Object.create(SuperParentType.prototype);
+                \_ set the prototype of child objects to be an instance of supertype or parent
+                    \_ * used a lot
+                    \_ ChildPrototypeName.prototype = Object.create(ParentPrototypeName.prototype);
+                \_ * important - objects inherit constructor supertype when instantiated therefore:
+                    \_ * should manually updated like:
+                    \_ ClassOrFunctionName.prototype.constructor = ClassOrFunctionName;
+            \_ * standard example creation of OBJECTS in JS
+                \_ function ParentObjectName() { }  // parent definition
+
+                   ParentObjectName.prototype.functionName = function() { ... do something ... };
+
+                   function ChildObjectName() { }   // child definition
+
+                   ChildObjectName.prototype = Object.create(ParentObjectName.prototype)  // child inheriting parents prototype
+                   ChildObjectName.prototype.constructor = ChildObjectName  // child manual constructor update
+
+                   let someObjectInstance = new ChildObjectName();  // instantiation of new object
+                                                                    // inherits supertype or parent methods/functions        
+            \_ mixin ??? like abstraction in some language ?? 
+            \_ closure ?? like encapsulation in other languages ???
+                \_ to make it make variable private, simply declare the variable in the constructor function as `let`
+                \_ create a privileged function inside the constructor function to access variable when required
+                    \_ example (within object constructor function): this.getTheValueWithin = function() { return privateValue; }; 
+            \_ (IIFE) Immediately Invoked Function Expression
+                \_ syntax:
+                    \_ (function() { 
+                           console.log('some message');
+                       })();
+
+2021-08-30 Mon 08:13 PM
+
+        \_ Functional Programming 
+            \_ Input >> Process >> Output
+                \_ Isolated functions
+                \_ Pure functions
+                \_ Functions with limited side effects
+            \_ Terminologies
+                \_ Callbacks --------------- are functions that are slipped or passed into another function to decide the invocation of that function
+                \_ First Class Functions --- in JS all functions are first class functions
+                    \_ first class means -> functions that can be saved in variables, stored in objects, or passed as function arguments
+                \_ Higher Order Functions -- functions that a function as argument, or return a function as a return value (map, filter, reduce)
+                \_ Lambda ------------------ when functions are passed in to or returned from another function ; functions which were passed in or returned
+
+2021-08-31 Tue 09:25 PM
+
+            \_ * functions should be pure functions, it should not cause side effects or mutations on the original variable or object 
+
+2021-09-01 Wed 09:06 PM
+
+            \_ dos and donts
+                \_ dont alter a variable or object
+                \_ declare function parameters instead to pass outside or global variable
+
+2021-09-06 Mon 09:20 AM
+
+            \_ .map method -> to extract data from array 
+                \_ Array.prototype.map() or map
+                    \_ first argument  -> current element being processed
+                    \_ second argument -> (optional) index of that element 
+                    \_ third argument  -> (optional) array upon which the map method was called 
+                    \_ the first element is first processed by the function passed in .map() method
+                    \_ then it returns a new element that was processed by the function passed and stored in the first element of the new array
+                    \_ then the second element now is processed and so on
+            \_ .filter method -> to extract data from array while being filtered to desire condition 
+                \_ Array.prototype.filter() or filter 
+                    \_ same process as map
+
+2021-09-07 Tue 08:31 PM
+
+            \_ USE INSTEAD TO AVOID ORIGINAL OBJECT MUTATIONS or UNWANTED SIDE EFFECTS // effective functional programming
+                \_ object methods
+                    \_ .map
+                    \_ .filter
+                    \_ .concat  // array or string
+                    \_ .reduce(functionCB, initial_of_functionCB_first_argument)
+                        \_ someObject.reduce((a, b) => {}, initial declaration of `a`);  // either empty array, object, zero, any number
+                        \_ mostly used often than .filter and .map  // filter and map are used on special cases only
+                    \_ .slice()
+
+2021-09-09 Thu 08:39 PM
+
+            \_ .sort method
+                \_ do not use since it mutates original object or array data
+                \_ use .concat or .slice to avoid mutation
+
+2021-09-13 Mon 08:58 PM
+
+            \_ .split method
+                \_ does not mutate original object  // good!
+                \_ argument - delimiter to indicate what to separate the strings
+                \_ return - array of strings separted by the indicated delimiter in the argument
+            \_ .join method
+                \_ does not mutate original object  // good!
+                \_ argument - delimiter to indicate how to separate the strings
+                \_ return - array of strings joined by the indicated delimiter in the argument
+            \_ .every method
+                \_ check array if every element passes a particular test
+                \_ returns - true if meets criteria, false if not
+            \_ .some method
+                \_ check array if every element passes a particular test
+                \_ returns - true if meets criteria, false if not
+
+2021-09-15 Wed 08:36 PM
+    
+            \_ Currying and Partial Application
+                \_ arity - number of arguments it requries
+                \_ function Currying - to convert a function of N arity into Nfunctions of arity one (1)
+                \_ function Currying - to convert a function of N arity into Nfunctions of arity one (1)
+        
+            \_ SUMMARY: functions learned
+                \_ .map
+                \_ .filter
+                \_ .reduce
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\_ Some Glossaries
+    \_ REPL
+        \_ Read, Evaluate, Print, Loop
+    \_ ETL
+        \_ Extract, Transform, Load
+    \_ OOP (Object Orientted Programming) 
+        \_ Encapsulation 
+        \_ Abstract 
+        \_ Inheritance 
+        \_ Polymorphism 
+    \_ ES6 released year 
+        \_ 2015 
+
+    
+
+
+
+
+
+
+
+
+

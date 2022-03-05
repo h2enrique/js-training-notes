@@ -1,0 +1,195 @@
+2021-07-15 Thu 10:22 PM
+
+    \_hacker 101 the web in depth
+        \_ SOP (Same-Origin Policy) - acts kinda like firewall - prevents web application to go haywire  
+            \_ restricts security-critical features
+                \_ domain contacts via XMLHttpRequest
+                \_ DOM access across separate frames/windows 
+            \_ developers can ease grip on SOP communications (SOP Lossening)
+                \_ change document.domain
+                \_ post messages between windows
+                \_ use CORS (cross-origin resource sharing)
+                \
+                \_ with these changes -> doors open for possible attacks
+                    \_ can call postMessage in IFrame
+        \_ CSRF --sea-surf (Cross-Site Request Forgery) - server must know if html form tag information sent actually came from real client
+                \_ Mitigation:
+                    \_ add csrf token to each form that the developer generates
+
+2021-07-19 Mon 07:18 PM
+
+        \_ XSS
+            \_ Reflected XSS and Stored XSS
+                \_ Mitigation
+                    \_ Find XSS. Follow the data.
+                    \_ Does it get embedded in a tag attribute? Does it get embedded into a string in a script tag?
+                    \_ Find special handling. Do URLs get turned into links, like posts in level 1?
+                    \_ Find how special characters are handled. Hint is to input something like ' < > : ; " 
+                    \_ replace hex values of angle brackets (<>) chars instead when escaping tags
+                    \_ send inputs on hidden fields then read/load in JS
+                    \_ before reading/loading inputs in JS, make sure input types are verified and certain
+                \_ rXSS vulnerabilities are inherently dependent on CSRF vulnerabilities to be exploitable, in the case of POSTs
+                    \_ Mitigation
+                        \_ proper CSRF token handling
+                \_ If your rXSS exists just in a GET, you are fine but dependent on CSRF otherwise
+                \_ Case 1 Exploit
+                    \_ During special char test, notice that angle brackets are passed through without encoding and input is being shown in text node of document
+                        \_ simple payload like, <script>alert(1);</script> will almost always wor
+                        \_ rare case is a WAF or other filtering may detect script tag and prevent execution
+                \_ Case 2 Exploit
+                    \_ onmouseover to trigger DOM event to execute a code (ie Javascript or ??) 
+                        \_ payload -> http://"onmouseover="alert(1); ||| result -> <a href="http://"onmouseover="alert(1);"> 
+                    \_ what if there is rXSS on a hidden input? and takes no space on the field.. therefore cant break out of tag
+                        \_ realize that there is no need for whitespace after ending quote of an attribute 
+                \_ Case 3 Exploit
+                    \_  inputs being reflected in a script tag, pretty lethal attack
+                            \_ normal HTML encoding does not properly mitigate this case
+                                \_ HTML entities will not be parsed in JS therefore input will simply be wrong
+                                \_ Single quotes are rarely encoded as HTML entities
+            \_ DOM XSS
+                \_ Does not reside or flaw on server-side to get attacker input to page
+                \_ Mitigation
+                    \_ Basically hard to mitigate since there are bajillion number of ways for an attacker to execute
+                    \_ No off the shelf to mitigate all bugs
+                        \_ embedding attacker data into eval/setTimeout/setInterval -> mitigate by string escaping/filtering
+                        \_ embedding attacker data into tags and attr -> mitigates by HTML encoding
+                    \_ GENERALLY just dont index user controlled data or inputs on a web page; if it is highly required then escape/encode for specific context
+
+        \_ Forced Browsing / Improper Authorization / auth-z bug / auth-n bug
+            \_ admin failure to protect its controlled environment
+                \_ users might able to access/query requests that should be forbidden publicly 
+            \_ checklist  
+                \_ perform every action on the highest privelege level like a root user
+                \_ then switch to lowest privelege user to check if you can perform the same actions 
+                \_ change IDs/CSRF token as needed
+
+2021-07-20 Tue 08:44 PM
+
+        \_ Diretory traversal / path injection attac
+            \_ by controlling path construction, attack is able to wlak up the filesystem tree and control where files are read from and written to 
+            \_ Example(s)
+                \_ echo file_get_contents('/var/www/sandbox/uploads/' . $_GET['file']); 
+                    \_ can inject http://badsite.org/get_upload.php?file=../../../../etc/passwd
+                    \_ to access /etc/passwd
+            \_ Mitigation(s)
+                \_ easy to counter
+                \_ do not allow path separators (/ and \) at all, if users are suppose to not be able to read/write files outside of path specifed
+                \_ simply strip instances of ../ or ..\ from paths
+                \_ do not let user data to control paths
+                \_  generate filename based on extension/MIME-type of file, an md5 of contents, etc...
+
+        \_ Command Injection
+            \_ Example(s) 
+                \_ if a user was has been granted access to a web interface and can run -ping command, potentially you can run other commands as well
+                \_ backticks (``) allow a user to embed a subcommand whose output gets embedded into the original command 
+
+            \_ Mitigation(s) 
+                \_ never embed user data into a command line at all
+                \_ if truly required then, programmer should use shell escaping i.e. escapeshellcmd() in PHP 
+                    \_ this function escapes # & ; ` | * ? ~ < > ^ () [] {} $ \ \x0A \xFF and any unbalanced quotes
+                \_ this attack normally occurs in enterprise-y backend code
+
+        \_ SQL injection / SQLi 
+            \_ types of queries: 
+                \_ SELECT [columns,...] FROM [table] WHERE [some > columns] AND here !=0;
+                \_ UPDATE [table] SET [column1=1, column2=2, column3=3] WHERE id=5;
+                \_ INSERT INTO [table...] ([columns,...]) VALUES (1,2,3,...);
+            \_ Example(s) 
+                \_ code
+                    \_ $name = $_GET['name'];
+                    \_ $results = mysql_query("SELECT age, grade, teacher FROM students WHERE (name = '$name')");
+            \_ Mitigation(s) 
+                \_ ensure that all strings are properly quoted and run through the appropriate escaping function (i.e. mysql_real_escape_string() in PHP) 
+                \_ use parameterized queries
+                \_ use an ORM for data access instead of direct queries 
+            \_ Detection
+                \_ most common SQLi as a hunter is in the conditions of a SELECT, example payloads to easily identify SQLi:
+                    \_ ' OR 1='1 -- // returns all rows (constant true)
+                    \_ ' AND 0='1 -- // returns zero rows (constant false)
+                \_ UNION
+                    \_ ' UNION SELECT NULL-- // do this until valid page appears to find out quantiy of column 
+                    \_ ' ORDER BY x-- // same as above then change 'x' to find out number of columns 
+                    \_ ' UNION SELECT 'string?', int? // after figuring out columns then hunter has to check what kind of data type is in that column 
+                    \_ ' UNION SELECT username, password FROM users-- // hunter/attacker may now retrieve 'interesting' data to query 
+                    \_ data type and number of columns must match in injected payload for retrieving hacked information  
+                    \_ ' UNION SELECT username || '~' || password FROM users-- // use to retrieve multiple column values to single column  
+        \_ blind SQLi
+            \_ when payload was injected into a query however attacker cannot directly see results
+            \_ oracles -> results may return binary conditions
+                \_ Example(s)
+                    \_ allows you to answer a question with a true or false therefore attacker/hunter can exfiltrate data one bit at a time        
+                    \_ attacker/hunter can read the admin's password for a site bit by bit then recontruct it via scripting language (python, javascript, etc...)
+            \_ truly blind -> no results found and could not identify if attack is successful or not 
+                \_ Example(s)
+                    \_ a facility logs web requests to database as user interacts, as a result user never sees the results of query will
+                       see its failures/errors impact of use of the application  
+            \_ truly blind to ---> oracle
+                \_ adding conditional delay in injections can make blind SQLi to oracle (e.g. 10s delay for 1, and no delay for 0) 
+
+
+                     
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        \_ Cheat Sheeeeet 
+            \_ XSS / auth-z/auth-n
+                \_ "><h1>test</h1>  // `">` is key here
+                \_ '+alert(1)+'
+                \_ "onmouseover="alert(1) 
+                \_ http://"onmouseover="alert(1) 
+            \_ Command Injection 
+                \_ backticks (``), semicolons (:), pipes (|), and ampersands (&) are your friends 
+            \_ SQLi
+                \_ database identification techniques 
+                    \_ /* !comment here */ -> normal comment to most DBs, however, on MySQL will include the contents of the comment inline
+                                              if it has an exclamation (!) point at the beginning 
+                    \_ WAITFOR DELAY will work on Microsoft SQL and fail on most
+                    \_ UTL_INADDR.get_host_address('google.com') will do a DNS request on Oraclt
+
+
+
+        \_ CTF Date Completion
+            \_ 1/1 A little something to get you started -> 2021-07-06 Tue 07:51 PM
+            \_ 2/4 Micro-CMS v1 -> 2021-07-19 Mon 08:55 PM
+            \_ 3/4 Micro-CMS v1 -> 2021-07-20 Tues 07:50 PM
+            \_ 4/4 Micro-CMS v1 -> 2021-07-21 Wed 07:31 PM 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

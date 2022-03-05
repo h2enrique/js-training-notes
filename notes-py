@@ -1,0 +1,72 @@
+2021-07-18 Sun 03:29
+
+PYTHON
+
+2021-07-18 Sun 03:29 PM
+    
+    \_ Started reading Automate the boring stuff with python
+        \_ What to learn
+            \_ Moving and renaming thousands of files and sorting them into folders
+            \_ Filling out online forms -- no typing required
+            \_ Downloading files or copying text from a website whenever it updates 
+            \_ Having your computer text you custom notifications 
+            \_ Updating or formatting Excel spreadsheets 
+            \_ Checking your email and sending out prewritten responses
+        \_ Lists
+            \_ example
+                \_ test = ['im a string', 2, None, True, 3.1416]
+            \_ accessing values
+                \_ same like arrays in C
+                \_ can use slicing
+                    \_ test[1:4]  # returns [2, None, True]
+                \_ negative index
+                    \_ test[-1]  # returns 3.1416
+                \_ range(len(list)) with `for` loop
+                \_ enumerate() function   
+                    \_ returns two values: index, items on list
+            \_ changing values
+                \_ test[2] = False  # returns ['im a string', 2, False, True, 3.1416]
+            \_ removing values
+                \_ del test[2]  # returns ['im a string', 2, True, 3.1416]
+            \_ multiple assignment to multiple variables
+                \_ should be same number of variables and len(list)
+                \_ example
+                    \_ info1, info2, info3, info4, info5 = test  # assignment 
+                    \_ # result from multi assignment
+                        \_ info1 = 'im a string'
+                           info2 = 2
+                           info3 = None 
+                           info4 = True
+                           info5 = 3.1416 
+            \_ functions
+                \_ random.choice()
+                \_ random.shuffle()
+            \_ methods
+                \_ .index(<value>) 
+                \_ .append(<value>)
+                \_ .insert(<index>, <value>)
+                \_ .remove(<value>)  # use when value is known on the list
+                                     # use `del` when index is known on the list 
+                \_ .sort(None)  # ASCIIbetical order ['A', 'B', 'C', 'a', 'b'] 
+                    \_ .sort(reverse=True) 
+                    \_ .sort(key=str.lower)  #returns ['a', 'A', 'b', 'B', 'C']
+                \_ .reverse(None)  # not sorted; returns as it is but flipped 
+
+        \_ `in` and `not in` operator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
